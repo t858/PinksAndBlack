@@ -50,16 +50,11 @@
             <h4 class="mb-3">Billing Information</h4>
 
           <!-- Form containing POST parameters -->
-            <form method='POST' action='https://checkout.flutterwave.com/v3/hosted/pay'>
+            <form id="paymentForm">
 
                 <!-- Hidden parameters containing interswitch merchant credentials -->
-                <input type="hidden" name="public_key" value="FLWPUBK_TEST-398fadbbe2d50b5d2ae6c46feff9b4b3-X"/>
-                <input type="hidden" name="tx_ref" value="bitethtx-019203" />
                 <input type="hidden" name="amount" value="" />
                 <input type="hidden" name="product_names" value="" />
-                <input type="hidden" name="currency" value="NGN" />
-                <input type="hidden" name="redirect_url" value="https://google.com" />
-                <input type="hidden" name="meta[token]" value="54" />
                 <!-- Hidden parameters end -->
 
                 <div class="row">
@@ -78,13 +73,11 @@
                         </div>
                     </div>
                 </div>
-
-
                 <div class="mb-3">
-                    <label for="email">Email</label>
-                    <input name="cust_id" type="email" class="form-control" id="email" name="customer[email]" placeholder="you@example.com" required>
+                    <label for="address2">Email (optional)</label>
+                    <input type="text" class="form-control">
                     <div class="invalid-feedback">
-                        Please enter a valid email address for shipping updates.
+                        Please enter your Email for contacting
                     </div>
                 </div>
 
@@ -97,8 +90,8 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="address2">Phone Number</label>
-                    <input type="text" class="form-control" id="address2" name="customer[phone]" required>
+                    <label for="address2">Phone Number (add @gmail.com at the end of your digits)</label>
+                    <input type="text" class="form-control" id="phone" name="customer[phone]" placeholder="08056003042@gmail.com" required>
                     <div class="invalid-feedback">
                         Please enter your phone number for contacting
                     </div>
@@ -109,7 +102,7 @@
 
                 <h4 class="mb-3">Payment</h4>
                 <hr class="mb-4">
-                <button type="submit" style="border: 1px solid rgb(206, 206, 206);
+                <button type="submit" onclick="payWithPaystack()" style="border: 1px solid rgb(206, 206, 206);
 				height: 40px;
 				margin: 0;
 				box-shadow: rgb(226, 224, 224) 0px 1px 3px;
@@ -138,7 +131,7 @@
     </div>
 
     <footer class="my-5 pt-5 text-muted text-center text-small">
-        <p class="mb-1">&copy; 2020 Interswitch Group</p>
+        <p class="mb-1">&copy; Intergrated With Paystack</p>
 
     </footer>
 </div>
@@ -146,6 +139,7 @@
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
+<script src="https://js.paystack.co/v1/inline.js"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         crossorigin="anonymous"></script>
