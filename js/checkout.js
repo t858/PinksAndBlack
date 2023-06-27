@@ -8,16 +8,15 @@ function calculateTotalPrice() {
 }
 
 // Function to update the hidden input field values
-// Function to update the hidden input field values
 function updateHiddenInputValues() {
   const amountInput = document.querySelector('input[name="amount"]');
   const productNamesInput = document.querySelector('input[name="product_names"]');
-  
-  amountInput.value = calculateTotalPrice().toString();
-  
-  // Get an array of product names
-  const productNames = cartItems.map(item => item.name);
-  productNamesInput.value = productNames.join(','); // Concatenate the product names with a comma separator
+  const addressInput = document.querySelector('input[name="customer[Address]"]');
+  const totalAmount = calculateTotalPrice();
+
+  amountInput.value = totalAmount.toString();
+  productNamesInput.value = cartItems.map(item => item.name).join(',');
+  addressInput.value = document.getElementById('address').value;
 }
 
 // Function to display the cart items and update the total price
@@ -51,3 +50,57 @@ let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
 
 // Display the cart items on page load
 displayCartItems();
+
+// Add event listener to the form submit button
+document.getElementById('paymentForm').addEventListener('submit', payWithPaystack, false);
+
+function payWithPaystack(e) {
+  e.preventDefault();
+
+  const totalAmount = calculateTotalPrice();
+  const email = document.getElementById('phone').value;
+  const firstName = document.getElementById('firstName').value;
+  const lastName = document.getElementById('lastName').value;
+  const Location = document.getElementById('address').value
+
+  let handler = PaystackPop.setup({
+    key: 'pk_live_979ad5f4670ca5fc1ba14aea8ca3dd0b864b8ec8', // Replace with your public key
+    email: email,
+    amount: totalAmount * 100,
+    currency: 'NGN',
+    metadata: {
+      custom_fields: [
+        {
+          display_name: 'Cart Item',
+          variable_name: 'Cart Item',
+          value: cartItems.map(item => item.name).join(','),
+        },
+        {
+          display_name: 'First Name',
+          variable_name: 'First Name',
+          value: firstName,
+        },
+        {
+          display_name: 'Last Name',
+          variable_name: 'Last Name',
+          value: lastName,
+        },
+        {
+          display_name: 'Address',
+          variable_name: 'Address',
+          value: Location,
+        },
+      ],
+    },
+    
+    onClose: function () {
+      alert('Window closed.');
+    },
+    callback: function (response) {
+      let message = 'Payment complete! Reference: ' + response.reference;
+      alert(message);
+    },
+  });
+
+  handler.openIframe();
+}
